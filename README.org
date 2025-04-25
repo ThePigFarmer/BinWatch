@@ -1,5 +1,5 @@
 * Configuration
-You will have to create a binctl config file. You should be able to copy the sample config.
+You will have to create a binwatch config file. You should be able to copy the sample config.
 
 * Starting
 Right now, init.scm needs to be ran to start the system. Someday maybe we can build a proper cli for this. Init.scm will start the data logger which is a simple python program that feeds the data from mqtt into the database. Someday this may be all done in guile scheme. Also, it would be nice for this to use the config file also.

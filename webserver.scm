@@ -7,8 +7,8 @@
   #:use-module (web uri)
   #:use-module (sxml simple)
   #:use-module (bin-reading)
-  #:use-module (dbman))
-
+  ;; #:use-module (dbman)
+  )
 ;; someday, make html output
 (define (templatize title body)
   `(html (head (title ,title))
@@ -51,15 +51,15 @@
     (values '((content-type . (text/plain)))
             out)))
 
-(define router `([() . ,go-home-response] ; for "/"
-                 [("home") . ,home-response]
-                 [("about") . ,about-response]
-                 [("bins") . ,bins-text-response]
-                 [("bins" "text") . ,bins-text-response]))
+(define response-handler-table `([() . ,about-response] ; for "/", I wish it would be "" instead
+                                 [("home") . ,home-response]
+                                 [("about") . ,about-response]
+                                 [("bins") . ,bins-text-response]
+                                 [("bins" "text") . ,bins-text-response]))
 
 (define (main-handler request body)
   (let* ([path-components (request-path-components request)]
-         [response-handler (assoc-ref router path-components)])
+         [response-handler (assoc-ref response-handler-table path-components)])
 
     ;; make sure we have a response availible
     (if response-handler
@@ -67,6 +67,6 @@
         (not-found-response request))))
 
 
-(define-public (webserver-run)
+(define-public (start-webserver)
   (display "starting guile web server: http://localhost:8080\nC-c C-c to quit.\n")
-  (run-server main-handler))
+  (run-server main-handler 'fibers))

@@ -8,7 +8,7 @@
                     (vector-ref row 1)
                     (vector-ref row 2)))
 
-(define-public (dbman-init-database file-path)
+(define-public (dbman-init-database! file-path)
   (format #t "bin database at ~a~%" file-path)
 
   ;; IDEA: do we need to set table name via config file?
@@ -16,7 +16,8 @@
                 id VCHAR(6),
                 weight INTEGER,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)"]
-        [db (sqlite-open file-path)])
+        [db (sqlite-open file-path (logior SQLITE_OPEN_READWRITE
+                                           SQLITE_OPEN_CREATE))])
 
     (sqlite-exec db sql)
     (sqlite-close db)))
