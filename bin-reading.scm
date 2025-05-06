@@ -1,34 +1,30 @@
 (define-module (bin-reading)
   #:use-module (json)
   #:use-module (mqtt)
-  #:use-module (utils)
-  #:export (make-bin-reading
-            bin-reading?
-            bin-reading-id
-            bin-reading-weight
-            bin-reading-time))
+  #:use-module (utils))
 
-
-(define-record-type <bin-reading>
-  (make-bin-reading id weight time)
-  bin-reading?
-  (id bin-reading-id)
-  (weight bin-reading-weight)
-  (time bin-reading-time))
-
+;; one bin data
 (define-json-type <bin-data>
   (id)
   (weight))
 
-(define bin-state "no state yet")
+;; multiple bin data, use when we add more bins
+;; (define-json-type <bin-data-list>
+;;   (bin-data-list "bin-data-list" #(<bin-data>)))
 
-(define fake-bin-data (json->bin-data "{\"weight\":1600}"))
+(define bin-state #f)
 
-(define (json->bin-reading json-string)
-  (make-bin-reading json))
+(define fake-bin-data (json->bin-data "{\"id\":\"1b\",\"weight\":1600}"))
 
-(define (register-bin-reading json-string)
-  (json->bin-read))
+(define-public (register-bin-reading json-bin-reading)
+  (set! bin-state
+        (json->bin-data json-bin-reading)))
 
-(define-public (get-latest-bin-readings)
-  bin-state)
+(define-public (bin-state-string)
+  (if bin-state
+      (string-append "Bin "
+                     (bin-data-id bin-state)
+                     ": "
+                     (number->string (bin-data-weight bin-state))
+                     " lbs.")
+      "No bin reading is availible at this time, please try again later."))

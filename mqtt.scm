@@ -15,11 +15,6 @@
                      (error err)
                      (display "mqtt client connected\n")))))
 
-(define (binctl-message-handler payload)
-  (set! latest-message payload)
-  (format #t "got binctl message: ~a~%" payload)
-  (newline))
-
 (define-public (setup-mqtt-client!)
   (set! (disconnect-callback client)
         ;; this may clash, if so rename client

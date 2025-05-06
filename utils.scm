@@ -11,7 +11,7 @@
 
 ;; TODO add support for any number of arguments
 (define-public (file-path-append a b)
-  (string-append (a // b)))
+  (string-append a // b))
 
 (define-public (~/ path)
   "Expands to the full PATH within the current users home directory"

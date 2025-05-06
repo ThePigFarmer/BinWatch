@@ -47,11 +47,11 @@
 (define (main args)
   (setup-mqtt-client!)
 
-  (define mqtt-loop-delay 0.25)
-  (run-fibers
+  (let ((mqtt-loop-delay 0.25))
+    (run-fibers
    (lambda ()
-     (spawn-fiber (lambda () (mqtt-loop delay)))
-     (start-webserver))))
+     (spawn-fiber (lambda () (mqtt-loop mqtt-loop-delay)))
+     (start-webserver)))))
 
 ;; do we want to do this with the shebang?
 (main #f)
