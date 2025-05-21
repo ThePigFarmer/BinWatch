@@ -15,7 +15,7 @@
                      (error err)
                      (display "mqtt client connected\n")))))
 
-(define-public (setup-mqtt-client!)
+(define-public (setup-mqtt-client! broker-url)
   (set! (disconnect-callback client)
         ;; this may clash, if so rename client
         (lambda (client err)
@@ -33,7 +33,7 @@
                 (register-bin-reading msg-payload)
                 (display "unhandled topic, you may want to unsubscribe\n")))))
 
-  (connect client "localhost")
+  (connect client broker-url)
 
   ;; subscribe to topics
   (for-each (lambda (topic)
